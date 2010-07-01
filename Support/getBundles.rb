@@ -343,7 +343,7 @@ def getBundleLists
   
   $listsLoaded = false
   $dataarray  = [ ]
-  break if $close
+  exit if $close
   
   unless $firstrun
     $params = {

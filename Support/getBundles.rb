@@ -202,13 +202,13 @@ end
 
 def getRepoAbbrev(aBundleDict)
   repo = case aBundleDict['status']
-    when "Official":      "Official"
-    when "Under Review":  "Review"
+    when "Official" then     "Official"
+    when "Under Review" then "Review"
     else "3"
   end
   if repo == "3" && aBundleDict.has_key?('url')
     repo = case aBundleDict['url']
-      when /github\.com/: "Github"
+      when /github\.com/ then "Github"
       else "Private"
     end
   end
@@ -968,9 +968,9 @@ end
 
 def filterDataarrayForParams
   b = case $params['bundleSelection']
-    when "Review":      $dataarray.select {|v| v['source'] =~ /^R/}
-    when "Official":    $dataarray.select {|v| v['source'] =~ /^O/}
-    when "3rd Party":   $dataarray.select {|v| v['source'] !~ /^[OR]/}
+    when "Review" then    $dataarray.select {|v| v['source'] =~ /^R/}
+    when "Official" then  $dataarray.select {|v| v['source'] =~ /^O/}
+    when "3rd Party" then $dataarray.select {|v| v['source'] !~ /^[OR]/}
     else $dataarray
   end
   $params['dataarray'] = b
@@ -1168,26 +1168,26 @@ while $run do
 
   if $dialogResult.has_key?('returnArgument')
     case $dialogResult['returnArgument']
-      when 'installAllUpdates': $installThread = Thread.new { installAllUpdates }
-      when 'helpButtonIsPressed':   helpDIALOG
-      when 'cancelButtonIsPressed': 
+      when 'installAllUpdates' then $installThread = Thread.new { installAllUpdates }
+      when 'helpButtonIsPressed' then helpDIALOG
+      when 'cancelButtonIsPressed' then
         $close = true
         $params['isBusy'] = false
         $firstrun = false
         updateDIALOG
-      when 'infoButtonIsPressed':   $infoThread = Thread.new { infoDIALOG($dialogResult) }
-      when 'revealInFinderIsPressed':
+      when 'infoButtonIsPressed' then $infoThread = Thread.new { infoDIALOG($dialogResult) }
+      when 'revealInFinderIsPressed' then
         $finder_app = ENV['TM_GETBUNDLES_REVEAL_BUNDLE_IN'] || "Finder"
         %x{osascript -e 'tell app "#{$finder_app}" to reveal POSIX file("#{$localBundles[$dialogResult['uuid']]['path']}")'}
-      when 'openAsProjectIsPressed': %x{mate '#{$localBundles[$dialogResult['uuid']]['path']}'}
-      when 'deleteButtonIsPressed':
+      when 'openAsProjectIsPressed' then %x{mate '#{$localBundles[$dialogResult['uuid']]['path']}'}
+      when 'deleteButtonIsPressed' then
         case $dialogResult['action']
-          when "Enable": enableBundle($localBundles[$dialogResult['uuid']], $dialogResult['path'])
-          when "Undelete": unDeleteBundle($localBundles[$dialogResult['uuid']], $dialogResult['path'])
+          when "Enable" then enableBundle($localBundles[$dialogResult['uuid']], $dialogResult['path'])
+          when "Undelete" then unDeleteBundle($localBundles[$dialogResult['uuid']], $dialogResult['path'])
           else
             deleteBundle($dialogResult['uuid'])
         end
-      when 'closeButtonIsPressed':
+      when 'closeButtonIsPressed' then
         closeMe
         break
       else # install bundle(s)
